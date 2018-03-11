@@ -68,7 +68,7 @@ CREATE TABLE `sys_role_menu` (
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
   `id` varchar(64) NOT NULL COMMENT '系统用户表',
-  `username` varchar(64) NOT NULL COMMENT '用户名',
+  `username` varchar(64) NOT NULL UNIQUE COMMENT '用户名',
   `password` varchar(100) NOT NULL COMMENT '密码',
   `email` varchar(100) DEFAULT NULL COMMENT '电子邮箱',
   `mobile` varchar(20) DEFAULT NULL COMMENT '联系方式',

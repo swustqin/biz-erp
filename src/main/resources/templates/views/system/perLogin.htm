@@ -92,63 +92,66 @@
     </table>
 </div>
 <script type="text/javascript">
-        var ifloading = true;
-        nui.parse();
-        $(document).keydown(function (event) {
-            if (event.keyCode == 13) { //绑定回车
-                $("#login_btn").trigger("click")
+    var ifloading = true;
+    nui.parse();
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) { //绑定回车
+            $("#login_btn").trigger("click")
+        }
+    });
+
+    $("#login_btn").click(function () {
+        var _$username = $("#username").val();
+        var _$password = $("#password").val();
+        if (!_$username || _$username == "") {
+            $("#error_msg").html("账号不能为空！");
+            return;
+        }
+        if (!_$password || _$password == "") {
+            $("#error_msg").html("密码不能为空！");
+            return;
+        }
+        ifloading = true;
+        setTimeout(function () {
+            loading();
+        }, 1000);
+        nui.ajax({
+            url: "${base}/sys/login.do",
+            type: "POST",
+            data: {"username": _$username, "password": _$password},
+            success: function (text) {
+                closeLoading();
+                var rs = nui.decode(text);
+                if (rs.code == 200) {
+                    window.location = "${base}/index.do";
+                    alert("${base}/index.do");
+                    alert(window.location);
+                } else {
+                    $("#error_msg").html("账号或密码错误,请重试!");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                closeLoading();
+                printLog(jqXHR.responseText);
             }
         });
+    })
 
-        $("#login_btn").click(function () {
-            var _$username = $("#username").val();
-            var _$password = $("#password").val();
-            if (!_$username || _$username == "") {
-                $("#error_msg").html("账号不能为空！");
-                return;
-            }
-            if (!_$password || _$password == "") {
-                $("#error_msg").html("密码不能为空！");
-                return;
-            }
-            ifloading = true;
-            setTimeout(function () {
-                loading();
-            }, 1000);
-            nui.ajax({
-                url: "${base}/sys/login.do",
-                type:"POST",
-                data: {"userAccount": _$username, "userPwd": _$password},
-                success: function (text) {
-                    closeLoading();
-                    var rs = nui.decode(text);
-                    if (rs.code==200) {
-                        window.location = "${base}/index.do";
-                    } else {
-                        $("#error_msg").html("账号或密码错误,请重试!");
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    closeLoading();
-                    printLog(jqXHR.responseText);
-                }
+
+    function loading() {
+        if (ifloading) {
+            mini.mask({
+                el: document.body,
+                cls: 'mini-mask-loading',
+                html: '登录中...'
             });
-        })
-
-
-        function loading() {
-            if (ifloading) {
-                mini.mask({
-                    el: document.body,
-                    cls: 'mini-mask-loading',
-                    html: '登录中...'
-                });
-            }
         }
-        function closeLoading() {
-            ifloading = false;
-            mini.unmask(document.body);
-        }
+    }
+
+    function closeLoading() {
+        ifloading = false;
+        mini.unmask(document.body);
+    }
 
 </script>
 </body>

@@ -28,7 +28,7 @@ public class UserServiceTest {
 
     @Test
     public void findByName() throws Exception {
-        SysUser tuchuntong = userService.findByName("涂纯童");
+        SysUser tuchuntong = userService.findUser("admin");
         log.info(tuchuntong.toString());
         Assert.assertNotNull(tuchuntong);
     }

@@ -23,18 +23,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public SysUser findByName(String username) {
-        return userRepository.findByName(username);
+    public SysUser findUser(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public SysUser save(SysUser sysUser) {
         return userRepository.save(sysUser);
     }
-
-//    @Override
-//    public SysBaseInfo queryBaseInfo(String userName) {
-//        return userMapper.queryBaseInfo(userName);
-//    }
 
 }

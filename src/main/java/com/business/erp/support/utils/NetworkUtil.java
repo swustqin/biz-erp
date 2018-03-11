@@ -1,5 +1,8 @@
 package com.business.erp.support.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -10,6 +13,8 @@ import java.util.Locale;
  * @author tuchuntong and jadenQin
  */
 public class NetworkUtil {
+
+    private static Logger log = LoggerFactory.getLogger(NetworkUtil.class);
 
     /**
      * Get current IP and MAC address
@@ -24,15 +29,17 @@ public class NetworkUtil {
             byte[] mac = ni.getHardwareAddress();
             s[0] = address.getHostAddress();
             Formatter formatter = new Formatter();
-            for (int i = 0; i < mac.length; i++) {
-                s[1] = formatter.format(Locale.getDefault(), "%02X%s", mac[i],
-                        (i < mac.length - 1) ? "-" : "").toString();
+            if (mac != null) {
+                for (int i = 0; i < mac.length; i++) {
+                    s[1] = formatter.format(Locale.getDefault(), "%02X%s", mac[i],
+                            (i < mac.length - 1) ? "-" : "").toString();
 
+                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
-        return s[0] + "_" + s[1];
+        return s[1] == null ? s[0] : s[0] + "_" + s[1];
     }
 
 
@@ -50,7 +57,7 @@ public class NetworkUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.business.erp.base;
 
-import com.business.erp.model.bo.SysBaseInfo;
 import com.business.erp.model.po.system.SysUser;
 import com.business.erp.service.system.UserService;
 import com.business.erp.support.utils.NetworkUtil;
@@ -26,10 +25,6 @@ public class ErpShiroRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private UserMapper userMapper;
-
-
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         log.info("authorization management information");
@@ -47,9 +42,11 @@ public class ErpShiroRealm extends AuthorizingRealm {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String username = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
-        SysUser user = userService.findByName(username);
+        SysUser user = userService.findUser(username);
         if (user == null) {
-            return null;
+            throw new UnknownAccountException();
+        } else if (!user.getPassword().equals(password)) {
+            throw new IncorrectCredentialsException();
         }
         if (username.equals("admin")) {
             log.info("master account has been certified");
@@ -61,14 +58,16 @@ public class ErpShiroRealm extends AuthorizingRealm {
         session.setAttribute("user", user);
         Date date = new Date();
         user.setLastLoginDate(date);
-        userService.save(user); //记录最后登录时间
+        userService.save(user);
 
 //        SysBaseInfo baseInfo = userService.queryBaseInfo(user.getUsername());
 //        session.setAttribute("baseInfo", baseInfo);
 
-        String ipInfo = NetworkUtil.getConfig();  //获取当前IP地址以及以太网MAC地址
+        session.setAttribute("baseInfo", user);
+
+        String ipInfo = NetworkUtil.getConfig();
         session.setAttribute("ip", ipInfo);
 
-        return new SimpleAuthenticationInfo();
+        return new SimpleAuthenticationInfo(user, user.getPassword(), user.getName());
     }
 }
