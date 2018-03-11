@@ -12,7 +12,13 @@ public enum RuntimeEnums {
     VERSION_CHECK_FAIL("The input version is not supported"),
     SERVER_RUNTIME_EXCEPTION("Server runtime exception, Please try again later"),
     RECORD_NOT_FOUND("No Record is Found"),
-    USER_NOT_FOUND("User not found by requestId!");
+    USER_NOT_FOUND("User not found by requestId!"),
+    ACCOUNT_MSG_ERROR_NOTFOUND(" HR系统中无此账号,请联系系统管理员！"),
+    ACCOUNT_MSG_ERROR_CHECKFAIL(" 用户名或密码错误！"),
+    ACCOUNT_MSG_ERROR_LOCK(" 输入错误次数超限，账号已被锁定！"),
+    ACCOUNT_MSG_ERROR_AUTHENTICATION(" 账号权限不够！"),
+    ACCOUNT_MSG_SUCCESS_CHECKPASS(" 登陆成功！");
+
 
     private String runtimePropertiesValue;
     private Integer runtimePropertiesIntValue;

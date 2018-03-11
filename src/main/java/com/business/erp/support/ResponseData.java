@@ -96,6 +96,15 @@ public class ResponseData extends AbstractBaseSupport implements Serializable {
     }
 
     /**
+     * Default success response result with code 200 and empty data
+     *
+     * @return success response data
+     */
+    public static ResponseData ok() {
+        return new ResponseData(null);
+    }
+
+    /**
      * comparable required
      *
      * @param o object

@@ -122,7 +122,7 @@
                 success: function (text) {
                     closeLoading();
                     var rs = nui.decode(text);
-                    if (rs.success==true) {
+                    if (rs.code==200) {
                         window.location = "${base}/index.do";
                     } else {
                         $("#error_msg").html("账号或密码错误,请重试!");
