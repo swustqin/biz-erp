@@ -17,11 +17,4 @@ public interface UserMapper {
 
     @Select("select * from sys_user where id = #{userId}")
     SysUser queryObject(String userId);
-
-//    @Select("SELECT ID,USER_NAME FROM SYS_USER  WHERE ACCOUNT = #{account}")
-//    @Results({
-//            @Result(property = "userId", column = "USER_ID"),
-//            @Result(property = "userName", column = "USER_NAME")
-//    })
-//    SysBaseInfo queryBaseInfo(String userName);
 }

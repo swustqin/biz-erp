@@ -24,12 +24,8 @@ public class IndexController extends AbstractCommonController {
      *
      * @return
      */
-//    @RequestMapping("/index") //如果加/,则url后缀必须跟上/
-//    public ModelAndView index(){
-//        ModelAndView modelAndView = new ModelAndView("/system/menu/index");
-//        return modelAndView;
-//    }
     @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @ResponseBody
     public ModelAndView indexPage() {
         ModelAndView view = new ModelAndView();
         view.setViewName("/system/menu/index");

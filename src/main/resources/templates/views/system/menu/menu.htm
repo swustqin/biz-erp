@@ -181,12 +181,13 @@
          * 表格过滤
          */
         var key = mini.get("key");
-        key.on("enter",function () {
+        key.on("enter", function () {
             search();
         })
         $("#search").click(function () {
             search();
         })
+
         function search() {
             if (key.value == "") {
                 menuTreeGrid.clearFilter();

@@ -37,7 +37,7 @@ public class UserServiceTest {
     @Test
     public void save() throws Exception {
         SysUser user = userMapper.getUser("admin");
-        user.setId(2L);
+        user.setId("2");
         user.setUsername("jaden");
         user.setPassword("jaden");
         user.setEmail("526195212@qq.com");

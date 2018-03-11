@@ -1,6 +1,6 @@
 package com.business.erp.config;
 
-import com.business.erp.base.LoginInterceptor;
+import com.business.erp.base.BaseInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -16,8 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
-    public LoginInterceptor getLoginInterceptor() {
-        return new LoginInterceptor();
+    public BaseInterceptor getLoginInterceptor() {
+        return new BaseInterceptor();
     }
 
     /**

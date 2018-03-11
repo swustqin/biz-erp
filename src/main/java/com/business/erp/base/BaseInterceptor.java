@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author tuchuntong and jadenQin
  */
-public class LoginInterceptor extends HandlerInterceptorAdapter {
+public class BaseInterceptor extends HandlerInterceptorAdapter {
 
-    private Logger log = LoggerFactory.getLogger(LoginInterceptor.class);
+    private Logger log = LoggerFactory.getLogger(BaseInterceptor.class);
 
 
     /**
@@ -44,7 +44,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute("basePath", basePath);
         log.info("absolute path is " + basePath);
         return true;
-
     }
 
     /**
@@ -64,7 +63,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response,
                            Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("postHandle run");
     }
 
     /**
@@ -81,7 +79,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
                                 Object handler, Exception ex) throws Exception {
-        log.info("afterCompletion run");
     }
 
 
