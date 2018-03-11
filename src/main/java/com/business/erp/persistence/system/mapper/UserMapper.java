@@ -15,6 +15,9 @@ public interface UserMapper {
     @Delete("DELETE FROM sys_user WHERE id =#{id}")
     void delete(Long id);
 
+    @Select("select * from sys_user where id = #{userId}")
+    SysUser queryObject(String userId);
+
 //    @Select("SELECT ID,USER_NAME FROM SYS_USER  WHERE ACCOUNT = #{account}")
 //    @Results({
 //            @Result(property = "userId", column = "USER_ID"),

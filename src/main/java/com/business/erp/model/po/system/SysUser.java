@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 public class SysUser implements Serializable {
     @Id
-    private Long id;
+    private String id;
     private String username;
     private String password;
     private String email;

@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(sysUser);
     }
 
+    @Override
+    public SysUser queryObject(String userId) {
+        return userMapper.queryObject(userId);
+    }
+
 }

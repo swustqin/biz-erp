@@ -1,15 +1,16 @@
+<#assign base=request.contextPath />
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>ITAM资产管理系统-首页</title>
-    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/boot.js"></script>
+    <script type="text/javascript" src="${base}/static/miniui/Scripts/boot.js"></script>
     <link rel="stylesheet" type="text/css"
-          href="$!basePath/resources/bootstrap/css/bootstrap.min.css?1211"/>
+          href="${base}/static/bootstrap/css/bootstrap.min.css?1211"/>
     <link rel="stylesheet" type="text/css"
-          href="$!basePath/resources/css/home.css?12112"/>
-    <script type="text/javascript" src="$!basePath/resources/js/common.js?093287"></script>
-    <script type="text/javascript" src="$!basePath/resources/echarts/echarts.common.min.js"></script>
+          href="${base}/static/css/home.css?12112"/>
+    <script type="text/javascript" src="${base}/static/js/common.js?093287"></script>
+    <script type="text/javascript" src="${base}/static/echarts/echarts.common.min.js"></script>
 </head>
 <body>
 <div style="width: 100%;height: 100%;">
@@ -95,7 +96,7 @@
         // 获取通知消息和系统消息
         var getNotice = function () {
             $ajax({
-                url: "$!basePath/getNotice",
+                url: "${base}/getNotice",
                 async: true,
                 callback: function (data) {
                     if (data.code == 0) {
@@ -133,7 +134,7 @@
         var mainTabs = parent.mini.get("mainTabs");
         var title = obj.type == 1 ? '通知公告' : "系统消息";
         var tab = mainTabs.getTab(title);
-        var url = "$!basePath/sys/notice/info/" + obj.id;
+        var url = "${base}/sys/notice/info/" + obj.id;
         if (!tab) {
             tab = {};
             tab = {
@@ -144,7 +145,7 @@
             }
             mainTabs.addTab(tab);
         } else if (url != tab.url) {
-            tab.url = "$!basePath/sys/notice/info/" + obj.id;
+            tab.url = "${base}/sys/notice/info/" + obj.id;
             mainTabs.reloadTab(tab);
         }
         mainTabs.activeTab(tab);
@@ -191,7 +192,7 @@
         var itAssetUseCharts = echarts.init(document.getElementById("itAssetUseCharts"));
         // 获取资产使用情况
         $ajax({
-            url: "$!basePath/getItAssetUse",
+            url: "${base}/getItAssetUse",
             async: true,
             callback: function (data) {
                 if (data.code == 0) {
@@ -210,7 +211,7 @@
 
         // 获取it配件库存数量
         $ajax({
-            url: "$!basePath/getItParts",
+            url: "${base}/getItParts",
             async: true,
             callback: function (data) {
                 if (data.code == 0) {
@@ -231,7 +232,7 @@
 
         // 获取手机卡统计
         $ajax({
-            url: "$!basePath/getPhoneCardCount",
+            url: "${base}/getPhoneCardCount",
             async: true,
             callback: function (data) {
                 if (data.code == 0) {
@@ -267,7 +268,7 @@
         })
         // 办公电脑信息设备统计
         $ajax({
-            url: "$!basePath/getOcAndIdCount",
+            url: "${base}/getOcAndIdCount",
             async: true,
             callback: function (data) {
                 if (data.code == 0) {
@@ -313,7 +314,7 @@
         })
 
         $ajax({
-            url: "$!basePath/getScrapWarn",
+            url: "${base}/getScrapWarn",
             async: true,
             callback: function (data) {
                 if (data.code == 0) {

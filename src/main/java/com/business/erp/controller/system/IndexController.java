@@ -2,16 +2,23 @@ package com.business.erp.controller.system;
 
 import com.business.erp.controller.AbstractCommonController;
 import com.business.erp.model.po.system.SysMenu;
+import com.business.erp.service.system.MenuService;
+import com.business.erp.support.utils.ShiroUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Controller
 public class IndexController extends AbstractCommonController {
+
+    @Resource
+    private MenuService menuService;
+
     /**
      * 后台管理页面
      *
@@ -35,9 +42,7 @@ public class IndexController extends AbstractCommonController {
     @RequestMapping("/user/menu")
     @ResponseBody
     public List<SysMenu> user() {
-        //List<SysMenuModel> menuList = sysMenuService.getUserMenuList(ShiroUtils.getUserId());
-
-        return null;
+        return menuService.getUserMenuList(ShiroUtil.getUserId());
     }
 
     /**

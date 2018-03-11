@@ -9,4 +9,6 @@ public interface UserService extends AbstractCommonService {
 
     SysUser save(SysUser sysUser);
 
+    SysUser queryObject(String userId);
+
 }
