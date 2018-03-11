@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITAM资产管理系统-菜单管理-新增菜单</title>
+    <link rel="stylesheet" type="text/css" href="$!basePath/resources/miniui/css/Site.css"/>
+    <link id="css_skin" rel="stylesheet" type="text/css"
+          href="$!basePath/resources/miniui/tools/skins/skin1/css/style.css"/>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/boot.js"></script>
+    <script type="text/javascript" src="$!basePath/resources/js/common.js?1109117"></script>
+</head>
+<body>
+<ul class="mini-menubar mymenu" style="width: 100%; padding-top: 1px;">
+    <li iconcls="icon-save" id="submit_btn">提交</li>
+    <li class="separator"></li>
+    <li iconcls="icon-close" onclick="T.closeOpenWindow('cancel')">关闭</li>
+</ul>
+<form id="menu_form" method="post" style="padding-top: 1px;">
+    <input name="id" id="id" class="mini-hidden"/>
+    <div>
+        <table style="table-layout: fixed;">
+            <tr align="center" class="radios" style="line-height: 30px;">
+                <td style="width: 70px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类型：
+                </td>
+                <td>
+                    <input class="mini-radiobuttonlist" id="type" repeatItems="3" repeatLayout="table"
+                           repeatDirection="horizontal" dataField="type"
+                           textField="type" valueField="val" value="1"/>
+                </td>
+            </tr>
+            <tr class="center" style="line-height:30px;">
+                <td style="width: 70px; text-align: right;">菜单名称：</td>
+                <td><input id="name" name="name"
+                           class="mini-textbox" width="230" required="true" maxlength="50"/></td>
+            </tr>
+            <tr class="center" style="line-height:30px;">
+                <td style="width: 70px; text-align: right;">上级菜单：</td>
+                <td><input id="parentMenu" name="parentId"
+                           class="mini-buttonedit" allowInput="false" required="true"
+                           width="230"
+                           maxlength="50"/></td>
+            </tr>
+            <tr id="urlTr" class="center" style="line-height:30px;">
+                <td style="width: 70px; text-align: right;">菜单URL：</td>
+                <td><input id="url" name="url"
+                           class="mini-textbox" width="230" required="true" maxlength="50"/></td>
+            </tr>
+            <tr id="permsTr" class="center" style="line-height:30px;">
+                <td style="width: 70px; text-align: right;">授权标示：</td>
+                <td><input id="perms" name="perms"
+                           class="mini-textbox" emptyText="多个用逗号分隔，如：user:list,user:create" width="230"
+                           maxlength="50"/>
+                </td>
+            </tr>
+            <tr class="center" style="line-height:30px;">
+                <td style="width: 70px; text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序：</td>
+                <td><input id="orderNum'" name="orderNum"
+                           class="mini-textbox" required="true" width="230" value="1" maxlength="50"/></td>
+            </tr>
+            <!-- 修改需要获取type -->
+            <td style="display:none"><input id="txt_type" name="type"
+                                            class="mini-textbox" width="150" maxlength="50"/></td>
+        </table>
+    </div>
+</form>
+
+<script>
+    mini.parse();
+
+    var menu_form = new mini.Form("menu_form");
+    var radio = mini.get("type");
+    var _$urlTr = $("#urlTr");
+    var _$permsTr = $("#permsTr");
+    var setFormData = function (data) {
+        radio.setValue(data.type);
+        radioValueChanged();
+        menu_form.setData(data);
+        var parent = mini.get("parentMenu");
+        parent.setValue(data.parentId);
+        parent.setText(data.parentName);
+    }
+    var radioValueChanged = function () {
+        var type = radio.getValue();
+        if (type == 0) {
+            _$urlTr.hide();
+            _$permsTr.hide();
+        } else if (type == 1) {
+            _$urlTr.show();
+            _$permsTr.show();
+        } else {
+            _$urlTr.hide();
+        }
+    }
+    $(function () {
+        /**
+         * radio-list start-----
+         */
+        var radio_data = new Array();
+        radio_data.push({
+            type: "目录",
+            val: 0
+        });
+        radio_data.push({
+            type: "菜单",
+            val: 1
+        });
+        radio_data.push({
+            type: "按钮",
+            val: 2
+        });
+        radio.loadData(radio_data);
+        radio.on("valuechanged", function () {
+            radioValueChanged();
+        })
+        /**
+         * radio_list end ---------
+         */
+
+
+        $("#submit_btn").click(function () {
+            menu_form.validate();
+            if (!menu_form.isValid()) {
+                return;
+            }
+            var form_data = menu_form.getData();      //获取表单多个控件的数据
+            form_data.type = radio.getValue();
+            if (form_data.type == 0) {
+                form_data.perms = "";
+                form_data.url = "";
+            } else if (form_data.type == 2) {
+                form_data.url = "";
+            }
+            var json_data = mini.encode(form_data);
+            // 显示遮罩层
+            lockMask();
+            // 发送ajax请求
+            var url = (form_data.id != null&&form_data.id!="")?"$!basePath/sys/menu/update":"$!basePath/sys/menu/save";
+//            console.info(url);
+//            console.info(form_data)
+//            return;
+            $ajax({
+                url: url, type: "POST", data: json_data, callback: function (data) {
+                    alert({
+                        msg: "保存成功!", callback: function () {
+                            T.closeOpenWindow('cancel');
+                        }
+                    });
+                }
+            })
+        })
+
+        mini.get("parentMenu").on("buttonclick",function () {
+            // 选择上级菜单的输入框
+            var _me = this;
+            mini.open({
+                url: "$!basePath/sys/menu/choose_parent_menu",
+                title: "选择上级菜单",
+                width: 400,
+                height: 400,
+                allowResize: false,
+                ondestroy: function (action) {
+                    if (action == "confirm") {
+                        var iframe = this.getIFrameEl();
+                        var data = iframe.contentWindow.getSelectNodeData();
+                        if (data) {
+                            _me.setValue(data.id);
+                            _me.setText(data.name);
+                        }
+                    }
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+body {
+    margin:0;
+    padding:0;
+    border:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Microsoft YaHei',Georgia,Serif;
+    font-size:12px;
+    background-color:#ffffff;
+    color:#333333;
+}
+
+/*表单控件Lable形式显示*/
+.asLabel .mini-textbox-border,
+.asLabel .mini-textbox-input,
+.asLabel .mini-buttonedit-border,
+.asLabel .mini-buttonedit-input,
+.asLabel .mini-textboxlist-border
+{
+border:0;background:none;cursor:default;
+}
+.asLabel .mini-buttonedit-button,
+.asLabel .mini-textboxlist-close
+{
+display:none;
+}
+.asLabel .mini-textboxlist-item
+{
+padding-right:8px;
+}
+
+/*文本超长自动隐藏*/
+.AutoHidWords {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            padding-left: 2px;
+            padding-right: 2px;
+        }

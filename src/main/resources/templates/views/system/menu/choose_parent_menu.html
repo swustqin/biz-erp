@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITAM资产管理系统-菜单管理-选择菜单</title>
+    <link rel="stylesheet" type="text/css" href="$!basePath/resources/miniui/css/Site.css"/>
+    <link id="css_skin" rel="stylesheet" type="text/css"
+          href="$!basePath/resources/miniui/tools/skins/skin1/css/style.css"/>
+    <link id="css_icon" rel="stylesheet" type="text/css" href="$!basePath/resources/miniui/tools/icons/icon.css"/>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/boot.js"></script>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/Global.js"></script>
+    <script type="text/javascript" src="$!basePath/resources/js/common.js?110917"></script>
+</head>
+<body>
+<ul class="mini-menubar" style="width: 100%; padding-top: 1px;">
+    <li iconcls="icon-save"id="confirm_btn">确定</li>
+    <li class="separator"></li>
+    <li iconcls="icon-close" onclick="T.closeOpenWindow('cancel')">关闭</li>
+</ul>
+
+<div title="上级菜单">
+    <div id="menuChooseTree" class="mini-tree"
+         style="width: 400px; height: 340px;" url="$!basePath/sys/menu/choose_parent_menu"
+         ajaxType="post" expandOnLoad="true" resultAsTree="false" onnodedblclick="dbConfirmNode" expandOnDblClick="false" textField="name" idField="id"
+         parentField="parentId"></div>
+</div>
+<script>
+    mini.parse();
+    var menuChooseTree = mini.get("menuChooseTree");
+    var dbConfirmNode = function (node) {
+        closeWindow();
+    }
+    $("#confirm_btn").click(function () {
+        closeWindow()
+    })
+
+    var getSelectNodeData = function () {
+        var node =  menuChooseTree.getSelectedNode();
+        return node;
+    }
+
+
+    var closeWindow = function () {
+        if (window.CloseOwnerWindow) return window.CloseOwnerWindow("confirm");
+        else window.close();
+    }
+
+</script>
+</body>
+</html>

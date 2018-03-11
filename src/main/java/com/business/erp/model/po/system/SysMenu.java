@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
 @DynamicUpdate
 @Data
 public class SysMenu {
-
+    @Id
     private String id;
     private String parentId;
     private String name;

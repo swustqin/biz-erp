@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITAM资产管理系统-菜单管理</title>
+    <link rel="stylesheet" type="text/css" href="$!basePath/resources/miniui/css/Site.css"/>
+    <link id="css_skin" rel="stylesheet" type="text/css"
+          href="$!basePath/resources/miniui/tools/skins/skin1/css/style.css"/>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/boot.js"></script>
+    <script type="text/javascript" src="$!basePath/resources/js/common.js?12980910"></script>
+
+    <!--<script type="text/javascript" src="$!basePath/resources/miniui/Scripts/Global.js"></script>-->
+
+</head>
+<body>
+<div class="mini-panel" title="查询" style="width: 100%;"
+     showcollapsebutton="true" collapseontitleclick="true">
+    <div>
+        <label>菜单名称：</label>
+        <input id="key" name="key" class="mini-textbox"
+               width="150"/>
+        <a class="mini-button" iconCls="icon-search" id="search">查询</a>
+    </div>
+
+</div>
+
+<div style="height: 2px;"></div>
+
+<div class="mini-toolbar" style="border-bottom: 0; padding: 0px;">
+    <table style="width: 100%;">
+        <tbody>
+        <tr>
+            <td style="width: 100%;">
+                #if($shiro.hasPermission("sys:menu:save"))
+                <a class="mini-button" iconCls="icon-add" id="menuAdd">新增</a>
+                #end
+                #if($shiro.hasPermission("sys:menu:update"))
+                <a class="mini-button" iconCls="icon-edit" id="menuEdit">修改</a>
+                #end
+                #if($shiro.hasPermission("sys:menu:delete"))
+                <a class="mini-button" iconCls="icon-remove" id="menuDel">删除</a>
+                #end
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="mini-fit">
+
+    <div id="menuTreeGrid" class="mini-treegrid"
+         url="${base}/sys/menu/list" showTreeIcon="true"
+         treeColumn="name" idField="id" parentField="parentId"
+         resultAsTree="false" allowResize="true" expandOnLoad="true">
+        <div property="columns">
+            <div type="indexcolumn">序号</div>
+            <div type="checkcolumn"></div>
+            <div name="name" field="name" width="160">菜单名称</div>
+            <div field="type" width="80"
+                 headeralign="center" align="center" allowsort="true" renderer=typeConvert>类型
+            </div>
+            <div field="perms" width="80"
+                 headeralign="center" align="center" allowsort="true">授权标识
+            </div>
+            <div field="updateTime" width="120"
+                 headeralign="center" align="center" renderer=timerFormatter>创建时间
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    /**
+     * 将数字转换中类型
+     * @param row
+     */
+    var typeConvert = function (row) {
+        var _$type = row.value;
+        if (_$type == 0) {
+            return "目录";
+        } else if (_$type == 1) {
+            return "菜单";
+        } else {
+            return "按钮";
+        }
+    }
+
+    $(function () {
+        mini.parse();
+        // 获取菜单表格
+        var menuTreeGrid = mini.get("menuTreeGrid");
+        /**
+         * 新增菜单
+         */
+        $("#menuAdd").click(function () {
+            mini.open({
+                url: "${base}/sys/menu/add_update",
+                title: "新增菜单",
+                width: 350,
+                height: 300,
+                allowResize: false,
+                ondestroy: function (action) {
+                    menuTreeGrid.reload();
+                }
+            });
+        })
+        /**
+         * 修改菜单
+         */
+        $("#menuEdit").click(function () {
+            var node = getGridSelectedNode();
+            if (node) {
+                mini.open({
+                    url: "${base}/sys/menu/add_update",
+                    title: "修改菜单",
+                    width: 350,
+                    height: 300,
+                    allowResize: false,
+                    onload: function () {
+                        var iframe = this.getIFrameEl();
+                        if (node.parentId == '0')
+                            node.parentName = "根目录";
+                        iframe.contentWindow.setFormData(node);
+                    },
+                    ondestroy: function (action) {
+                        menuTreeGrid.reload();
+                    }
+                });
+            } else {
+                alert("请选择一条数据!");
+            }
+        })
+
+        /**
+         * 获取表格中选中的数据
+         */
+        var getGridSelectedNode = function () {
+            var node = menuTreeGrid.getSelectedNode();
+            return node;
+        }
+        /**
+         * 删除菜单
+         */
+        $("#menuDel").click(function () {
+            var node = getGridSelectedNode();
+            var ids = new Array();
+            if (node) {
+                var childrenNode = menuTreeGrid.getAllChildNodes(node);
+                var msg;
+                if (childrenNode.length > 0) {
+                    msg = "当前菜单存在子菜单，确定要删除将会删除本级菜单以及子菜单?";
+                } else {
+                    msg = "确定删除该菜单？"
+                }
+                // 点击确认按钮 发送ajax请求
+                confirm({
+                    msg: msg, callback: function () {
+                        childrenNode.forEach(function (childNode, index) {
+                            ids.push(childNode.id);
+                        })
+                        ids.push(node.id);
+                        $ajax({
+                            url: "${base}/sys/menu/delete",
+                            type: "POST",
+                            data: JSON.stringify(ids),
+                            callback: function (data) {
+                                alert({
+                                    msg: "删除成功!", callback: function () {
+                                        menuTreeGrid.load();
+                                    }
+                                });
+                            }
+                        })
+                    }
+                })
+            } else {
+                alert({msg: "请选择一条数据!"})
+            }
+        })
+        /**
+         * 表格过滤
+         */
+        var key = mini.get("key");
+        key.on("enter",function () {
+            search();
+        })
+        $("#search").click(function () {
+            search();
+        })
+        function search() {
+            if (key.value == "") {
+                menuTreeGrid.clearFilter();
+            } else {
+                menuTreeGrid.filter(function (node) {
+                    var text = node.name ? node.name.toLowerCase() : "";
+                    if (text.indexOf(key.value) != -1) {
+                        return true;
+                    }
+                });
+            }
+        }
+    })
+</script>
+</html>

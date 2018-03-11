@@ -13,8 +13,6 @@ public class SysBaseInfo implements Serializable {
 
     private long userId;
 
-    private String account;
-
     private String userName;
 
     private long empId;

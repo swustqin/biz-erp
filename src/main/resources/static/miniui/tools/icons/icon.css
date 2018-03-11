@@ -1,0 +1,208 @@
+.icon-organization {
+	background:url(organization.png) no-repeat;
+}
+.icon-orgalias {
+	background:url(orgalias.png) no-repeat;
+}
+
+.icon-keywords {
+	background:url(keywords.png) no-repeat;
+}
+
+.icon-unit {
+	background:url(unit.png) no-repeat;
+}
+
+.icon-position {
+	background:url(position.png) no-repeat;	
+}
+
+.icon-employee {
+	background:url(emp.png) no-repeat;	
+}
+
+.icon-duty {
+	background:url(duty.png) no-repeat;	
+}
+
+.icon-group {
+	background:url(group.png) no-repeat;	
+}
+
+.icon-user {
+	background:url(user.png) no-repeat;	
+}
+
+.icon-user-female {
+	background:url(user_female.png) no-repeat;	
+}
+
+.icon-user-green {
+	background:url(user_green.png) no-repeat;	
+}
+
+.icon-arrow-merge {
+	background:url(arrow_merge.png) no-repeat;	
+}
+
+.icon-duty-group {
+	background:url(duty_group.png) no-repeat;	
+}
+
+.icon-duty-manager {
+	background:url(duty_manager.png) no-repeat;	
+}
+
+.icon-application{
+    background:url(application.png) no-repeat;
+}
+
+.icon-application-home{
+    background:url(application_home.png) no-repeat;
+}
+
+.icon-function-group-close{
+    background:url(function_group_close.png) no-repeat;
+}
+
+.icon-function-group-open{
+    background:url(function_group_open.png) no-repeat;
+}
+
+.icon-menu{
+    background:url(menu.png) no-repeat;
+}
+
+.icon-menu-root{
+    background:url(menu_root.png) no-repeat;
+}
+
+.icon-gear{
+	background:url(gear.png) no-repeat;
+}
+
+.icon-and{
+	background:url(and.png) no-repeat;
+}
+
+.icon-or{
+	background:url(or.png) no-repeat;
+}
+
+.icon-condition{
+	background:url(condition.png) no-repeat;
+}
+
+.icon-authorization{
+    background:url(authorization.png) no-repeat;
+}
+
+.icon-auth-calculate{
+	background:url(auth_calculate.png) no-repeat;
+}
+
+.icon-change-password{
+    background:url(change_password.png) no-repeat;
+}
+
+.icon-role{
+	background:url(role.png) no-repeat;
+}
+
+.icon-reset{
+	background:url(reset.png) no-repeat;
+}
+
+.icon-processdef{
+	background:url(processdef.png) no-repeat;
+}
+
+.icon-manual_activity{
+	background:url(manual_activity.png) no-repeat;
+}
+
+
+
+
+
+
+/*以下为自定义替换nui默认图标*/
+
+.icon-add{
+	background:url(qy_add.png) no-repeat;
+}
+.icon-childrenadd{
+	background:url(qy_addchildren.png) no-repeat;
+}
+.icon-edit{
+	background:url(qy_edit.png) no-repeat;
+}
+.icon-remove{
+	background:url(qy_remove.png) no-repeat;
+}
+.icon-delete{
+	background:url(remove.gif) no-repeat;
+}
+.icon-save{
+	background:url(qy_save.png) no-repeat;
+}
+.icon-cancel{
+	background:url(qy_cancel.png) no-repeat;
+}
+.icon-reload{
+	background:url(qy_reload.png) no-repeat;
+}
+.icon-search{
+	background:url(qy_search.png) no-repeat;
+}
+.icon-shutdown{
+	background:url(qy_shutdown.png) no-repeat;
+}
+.icon-print{
+	background:url(qy_print.png) no-repeat;
+}
+.icon-commit{
+	background:url(qy_commit.png) no-repeat;
+}
+.icon-import{
+	background:url(qy_import.png) no-repeat;
+}
+.icon-export{
+	background:url(qy_export.png) no-repeat;
+}
+.icon-see{
+	background:url(qy_see.png) no-repeat;
+}
+.icon-download1{
+	background: url(../skins/skin1/images/qy_zk.png) no-repeat;
+}
+.icon-upload1{
+	background: url(../skins/skin1/images/qy_zk2.png) no-repeat;
+}
+.icon-undo1{
+	background:url(qy_undo.png) no-repeat;
+	width: 45px;
+	height: 16px;
+}
+
+/*分页图标替换*/
+.mini-pager-first
+{    
+    background:url(qy_first.png) no-repeat;
+}
+.mini-pager-prev
+{
+    background-image:url(qy_prev.png);
+}
+.mini-pager-next
+{
+    background-image:url(qy_next.png);
+}
+.mini-pager-last
+{
+    background-image:url(qy_last.png);
+}
+.mini-pager-reload
+{
+    background-image:url(qy_reload.png);
+}

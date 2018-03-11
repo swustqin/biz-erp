@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITAM资产管理系统-首页</title>
+    <script type="text/javascript" src="$!basePath/resources/miniui/Scripts/boot.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="$!basePath/resources/bootstrap/css/bootstrap.min.css?1211"/>
+    <link rel="stylesheet" type="text/css"
+          href="$!basePath/resources/css/home.css?12112"/>
+    <script type="text/javascript" src="$!basePath/resources/js/common.js?093287"></script>
+    <script type="text/javascript" src="$!basePath/resources/echarts/echarts.common.min.js"></script>
+</head>
+<body>
+<div style="width: 100%;height: 100%;">
+    <div style="height:30%;">
+
+        <div class="panel panel-success firstPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">通知公告</h3>
+            </div>
+            <ul id="notice" class="list-group">
+
+            </ul>
+        </div>
+        <div class="panel panel-success firstPanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">系统消息</h3>
+            </div>
+            <ul id="sysMsg" class="list-group">
+
+            </ul>
+        </div>
+    </div>
+
+    <div style="height:30%;">
+        <div class="panel panel-success compilePanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">IT资产使用情况</h3>
+            </div>
+            <div style="height:300px;width:97%;float: left;" id="itAssetUseCharts">
+
+            </div>
+        </div>
+    </div>
+    <div style="height:30%;display: none;" id="itPartsPanel">
+        <div class="panel panel-success compilePanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">IT配件库存</h3>
+            </div>
+            <div style="height:300px;width:97%;float: left;" id="itPartsCharts"></div>
+        </div>
+    </div>
+    <div style="height:30%;display: none;" id="phoneCardPanel">
+        <div class="panel panel-success compilePanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">手机卡使用情况</h3>
+            </div>
+            <div style="height:300px;width:97%;float: left;" id="phoneCardCharts"></div>
+        </div>
+    </div>
+    <div style="height:30%;display: none;" id="ocIdCountPanel">
+        <div class="panel panel-success compilePanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">办公电脑、信息设备统计</h3>
+            </div>
+            <div style="height:300px;width:97%;float: left;" id="ocIdCountCharts"></div>
+        </div>
+    </div>
+    <div style="height:30%;display: none;" id="scrapWarnPanel">
+        <div class="panel panel-success compilePanel">
+            <div class="panel-heading">
+                <h3 class="panel-title">报废预警</h3>
+            </div>
+            <div style="height:300px;width:97%;float: left;" id="scrapWarnChart"></div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    mini.parse();
+    $(document).on("click", ".notice_msg", function () {
+        var me = $(this);
+        addTab({
+            type: me.attr("type"),
+            id: me.attr("value")
+        });
+    })
+    $(function () {
+        // 通知窗口
+        var notice = $("#notice");
+        // 系统消息窗口
+        var sysMsg = $("#sysMsg");
+        // 获取通知消息和系统消息
+        var getNotice = function () {
+            $ajax({
+                url: "$!basePath/getNotice",
+                async: true,
+                callback: function (data) {
+                    if (data.code == 0) {
+                        var notices = data.notices;
+                        var noticeHtml = "";
+                        if (notices.length > 0) {
+                            for (var i = 0, j = notices.length; i < j; i++) {
+                                noticeHtml += "<li class='list-group-item'><a href='javascript:void(0)' class='notice_msg' type='" + notices[i].type + "' value='" + notices[i].id + "'><span style='width:70%;'>" + notices[i].title + "</span></a><div style='display:inline; float:right;'><span style='width:10%;text-align:center'>" + notices[i].creator + "</span>&nbsp;&nbsp;<span style='width:10%;text-align:center'>" + timerFormatterYmd(notices[i].createTime) + "</span></div></li>";
+                            }
+                        } else {
+                            noticeHtml = "<li class='list-group-item'>无通知</li>";
+                        }
+                        notice.html(noticeHtml);
+                        var sysmsgs = data.sysmsgs;
+                        var sysmsgHtml = "";
+                        if (sysmsgs.length > 0) {
+                            for (var i = 0, j = sysmsgs.length; i < j; i++) {
+                                sysmsgHtml += "<li class='list-group-item'><a href='javascript:void(0)' class='notice_msg' type='" + sysmsgs[i].type + "' value='" + sysmsgs[i].id + "'><span style='width:70%;'>" + sysmsgs[i].title + "</span></a><div style='display:inline; float:right;'><span style='width:10%;text-align:center'>" + sysmsgs[i].creator + "</span>&nbsp;&nbsp;<span style='width:10%;text-align:center'>" + timerFormatterYmd(sysmsgs[i].createTime) + "</span></div></li>";
+                            }
+                        } else {
+                            sysmsgHtml = "<li class='list-group-item'>无消息</li>";
+                        }
+                        sysMsg.html(sysmsgHtml);
+                    } else {
+                        console.info(data.msg);
+                    }
+
+                }
+            })
+        }
+        getNotice();
+
+    })
+    function addTab(obj) {
+        var mainTabs = parent.mini.get("mainTabs");
+        var title = obj.type == 1 ? '通知公告' : "系统消息";
+        var tab = mainTabs.getTab(title);
+        var url = "$!basePath/sys/notice/info/" + obj.id;
+        if (!tab) {
+            tab = {};
+            tab = {
+                title: title,
+                url: url,
+                name: title,
+                showCloseButton: true
+            }
+            mainTabs.addTab(tab);
+        } else if (url != tab.url) {
+            tab.url = "$!basePath/sys/notice/info/" + obj.id;
+            mainTabs.reloadTab(tab);
+        }
+        mainTabs.activeTab(tab);
+
+    }
+
+
+    $(function () {
+        /**
+         * 创建echarts option
+         */
+        var getOption = function (obj) {
+            var option = {
+                title: {
+                    text: obj.title
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                tooltip: {},
+                legend: {data: obj.legend},
+                xAxis: {
+                    type: 'category',
+                    data: obj.xAxis,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        interval: 0,//横轴信息全部显示
+                        rotate: -20//倾斜角
+                    }
+                },
+                yAxis: {},
+                series: obj.series
+            };
+            return option;
+        }
+        // echarts
+        var itAssetUseCharts = echarts.init(document.getElementById("itAssetUseCharts"));
+        // 获取资产使用情况
+        $ajax({
+            url: "$!basePath/getItAssetUse",
+            async: true,
+            callback: function (data) {
+                if (data.code == 0) {
+                    var itAssetUseOption = getOption({
+                        title: "IT资产使用情况",
+                        legend: ["在用数量"],
+                        xAxis: data.data.xAxis,
+                        series: [{name: "在用数量", type: "bar", data: data.data.series}]
+                    });
+                    itAssetUseCharts.setOption(itAssetUseOption);
+                } else {
+                    alert(data.msg);
+                }
+            }
+        })
+
+        // 获取it配件库存数量
+        $ajax({
+            url: "$!basePath/getItParts",
+            async: true,
+            callback: function (data) {
+                if (data.code == 0) {
+                    $("#itPartsPanel").show();
+                    var itPartsCharts = echarts.init(document.getElementById("itPartsCharts"));
+                    var itPartsOption = getOption({
+                        title: "IT配件库存",
+                        legend: ["库存数量"],
+                        xAxis: data.data.xAxis,
+                        series: [{name: "库存数量", type: "bar", data: data.data.series}]
+                    });
+                    itPartsCharts.setOption(itPartsOption);
+                } else {
+                    console.info(data.msg);
+                }
+            }
+        })
+
+        // 获取手机卡统计
+        $ajax({
+            url: "$!basePath/getPhoneCardCount",
+            async: true,
+            callback: function (data) {
+                if (data.code == 0) {
+                    $("#phoneCardPanel").show();
+                    var phoneCardCharts = echarts.init(document.getElementById("phoneCardCharts"));
+                    var phoneCardOption = getOption({
+                        title: "手机卡统计",
+                        legend: ["在用", "库存", "合计"],
+                        xAxis: data.data.xAxis,
+                        series: [
+                            {
+                                name: "在用",
+                                type: "bar",
+                                data: data.data.series3
+                            },
+                            {
+                                name: "库存",
+                                type: "bar",
+                                data: data.data.series2
+                            },
+                            {
+                                name: "合计",
+                                type: "bar",
+                                data: data.data.series1
+                            }
+                        ]
+                    });
+                    phoneCardCharts.setOption(phoneCardOption);
+                } else {
+                    console.info(data.msg);
+                }
+            }
+        })
+        // 办公电脑信息设备统计
+        $ajax({
+            url: "$!basePath/getOcAndIdCount",
+            async: true,
+            callback: function (data) {
+                if (data.code == 0) {
+                    $("#ocIdCountPanel").show();
+                    var phoneCardCharts = echarts.init(document.getElementById("ocIdCountCharts"));
+                    var phoneCardOption = getOption({
+                        title: "办公电脑、信息设备统计",
+                        legend: ["在用", "库存", "借用", "挂失", "合计"],
+                        xAxis: data.data.xAxis,
+                        series: [
+                            {
+                                name: "在用",
+                                type: "bar",
+                                data: data.data.use
+                            },
+                            {
+                                name: "库存",
+                                type: "bar",
+                                data: data.data.stock
+                            },
+                            {
+                                name: "借用",
+                                type: "bar",
+                                data: data.data.browse
+                            },
+                            {
+                                name: "挂失",
+                                type: "bar",
+                                data: data.data.loss
+                            },
+                            {
+                                name: "合计",
+                                type: "bar",
+                                data: data.data.total
+                            }
+                        ]
+                    });
+                    phoneCardCharts.setOption(phoneCardOption);
+                } else {
+                    console.info(data.msg);
+                }
+            }
+        })
+
+        $ajax({
+            url: "$!basePath/getScrapWarn",
+            async: true,
+            callback: function (data) {
+                if (data.code == 0) {
+                    $("#scrapWarnPanel").show();
+                    var scrapWarnChart = echarts.init(document.getElementById('scrapWarnChart'));
+                    var scrapWarnOption = {
+                        title: {
+                            text: '报废预警数据统计',
+                            subtext: '报废统计',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            x: 'left',
+                            data: data.data[0]
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                mark: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                magicType: {
+                                    show: true,
+                                    type: ['pie', 'funnel'],
+                                    option: {
+                                        funnel: {
+                                            x: '25%',
+                                            width: '50%',
+                                            funnelAlign: 'left',
+                                            max: 1548
+                                        }
+                                    }
+                                },
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        calculable: true,
+                        series: [
+                            {
+                                name: '统计数据',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '60%'],
+                                data: data.data[2]
+                            }
+                        ]
+                    };
+                    scrapWarnChart.setOption(scrapWarnOption);
+                }
+            }
+        })
+
+    })
+</script>
+</html>

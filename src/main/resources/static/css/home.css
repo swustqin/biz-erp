@@ -1,0 +1,44 @@
+.firstPanel{
+    width: 49%;
+    height: 30%;
+    float: left;
+    margin-left: 10px;
+}
+
+.secondPanel{
+    width: 32%;
+    height: 40%;
+    float: left;
+    margin-left: 10px;
+}
+
+.secondPanelPerson{
+    width: 65%;
+    height: 40%;
+    float: left;
+    margin-left: 10px;
+}
+.compilePanel{
+    width: 99%;
+    height: 60%;
+    float: left;
+    margin-left: 10px;
+
+}
+.fourPanel{
+    width: 49%;
+    height: 60%;
+    float: left;
+    margin-left: 10px;
+}
+/* .highcharts-button {
+display: none;
+} */
+.panel-title{
+    font-family: Microsoft YaHei;
+}
+.list-group-item{
+    font-family: Microsoft YaHei;
+    font-size:12px;
+
+}

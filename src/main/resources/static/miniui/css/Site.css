@@ -1,0 +1,58 @@
+body {
+    margin:0;
+    padding:0;
+    border:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Microsoft YaHei',Georgia,Serif;
+    font-size:12px;
+    background-color:#ffffff;
+    color:#333333;
+}
+
+
+#div_BackStyle {
+	height: 40px;
+	border: 0 none;
+	background-color: #00936D;
+	padding-top: 0px;
+}
+
+ul, ui {
+	margin: 0;
+	padding: 0;
+}
+
+#div_Scroll {
+	height: 22px;
+	overflow: hidden;
+	line-height: 22px;
+	vertical-align: middle;
+	float: left;
+	margin-right: 0px;
+	width: 460px;
+}
+
+#div_Scroll li {
+	text-align: left;
+}
+
+.TopMenu {
+	float: left;
+	width: 60px;
+	height: 40px;
+	border: 0px solid #111111;
+}
+
+.TopMenu .show {
+	height: 18px;
+	text-align: center;
+}
+
+.TopMenu .word {
+	height: 20px;
+	text-align: center;
+	color: #ffffff;
+}
+

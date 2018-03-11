@@ -103,8 +103,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 
-INSERT INTO sys_user(id,username,password,email,mobile,user_status,user_status,entry_id,update_id,name)
-  VALUE ('1','admin','admin'	,'tuchuntong@qq.com','13980613115' 	,'0','tuchuntong'	,'1','1',,'涂纯童' );
+INSERT INTO sys_user (id, username, password, email, mobile, entry_id, update_id, name)
+  VALUE ('1', 'admin', 'admin', 'tuchuntong@qq.com', '13980613115', '1', '1', '涂纯童');
 
 INSERT INTO `sys_menu`(id,parent_id,name,url,perms,type,order_num)
   VALUES ('1', '0', '菜单管理', '/menu', null, '2', '0');

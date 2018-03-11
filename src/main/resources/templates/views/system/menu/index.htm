@@ -1,0 +1,116 @@
+<#assign base=request.contextPath />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITAM资产管理系统</title>
+    <script type="text/javascript" src="${base}/static/miniui/Scripts/boot.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="${base}/static/miniui/css/Site.css"/>
+    <link id="css_skin" rel="stylesheet" type="text/css"
+          href="${base}/static/miniui/tools/skins/skin1/css/style.css"/>
+    <link id="css_icon" rel="stylesheet" type="text/css" href="${base}/static/miniui/tools/icons/icon.css"/>
+    <script type="text/javascript" src="${base}/static/js/index.js"></script>
+
+</head>
+<body>
+<div id="layoutMain" class="mini-layout"
+     style="width: 100%; height: 100%;">
+    <div class="header" region="north" height="41" splitsize="1"
+         showsplit="false" showheader="false">
+        <div id="div_BackStyle">
+            <div>
+                <table cellspacing="0" cellpadding="0"
+                       style="margin-top: 0px; height: 40px; width: 100%; table-layout: fixed;">
+                    <tr>
+                        <td style="width: 300px; vertical-align: middle;"><a> <img
+                                id="Img_qyLogo" alt=""
+                                style="height: 38px; width: 203px; cursor: pointer; margin-left: 20px; float: left;"
+                                src="images/qy_logo.png"/>
+                        </a></td>
+                        <td style="width: 500px;">
+                            <table cellspacing="0" cellpadding="0"
+                                   style="width: 100%; height: 100%">
+                                <tr>
+                                    <td style="width: 10px;">
+                                        <div
+                                                style="vertical-align: middle; width: 10px; height: 22px; line-height: 22px;"></div>
+                                    </td>
+                                    <td
+                                            style="text-align: center; vertical-align: middle; color: #fff;">
+                                        <div
+                                                style="float: left; width: 20px; height: 23px; line-height: 23px;">
+                                            <img alt="" width="23" src="images/tz.png"/>
+                                        </div>
+                                        <div id="div_Scroll">
+                                            <ul style="margin-left: 5px;">
+                                                <li>您好，欢迎使用ITAM资产管理系统</li>
+                                                <li>使用过程中如有任何疑问请联系信息管理部协助解决！</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width: 10px;">
+                                        <div
+                                                style="vertical-align: middle; width: 10px; height: 22px; line-height: 22px;"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 100px;">&nbsp;</td>
+                        <td style="width: 100px;">
+                            <div class="TopMenu">
+                                <div class="show">
+                                    <img alt="" src="images/loguser.png"/>
+                                </div>
+                                <div class="word"></div>
+                            </div>
+                            <div class="TopMenu" style="cursor: pointer;" onclick="window.location.href='logout'">
+                                <div class="show">
+                                    <img alt="" src="images/logout.png"/>
+                                </div>
+                                <div class="word">注销</div>
+                            </div>
+                        </td>
+                        <td style="width: 10px;">&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div title="center" region="center" style="border: 0;"
+         bodystyle="overflow:hidden;">
+        <!--Splitter-->
+        <div class="mini-splitter" style="width: 100%; height: 100%;"
+             borderstyle="border:0;">
+            <div size="180" maxsize="250" minsize="100" showcollapsebutton="false" style="border: 0;">
+                <!--左边菜单-->
+                <div id="leftTree" class="mini-outlooktree"
+                     url="${base}/user/menu.do" onnodeclick="nodeSelect"
+                     textfield="name" idfield="id" parentfield="parentId" expandOnLoad="0">
+                </div>
+            </div>
+            <div showcollapsebutton="false" style="border: 0;">
+                <!--显示区-->
+                <div id="mainTabs" class="mini-tabs" activeindex="0"
+                     style="width: 100%; height: 100%;" plain="false" contextMenu="#closeTabContextMenu">
+                    <div title="首页" name="indexPage" url="${base}/home.do"></div>
+                </div>
+                <ul id="closeTabContextMenu" class="mini-contextmenu" onbeforeopen="beforeOpen">
+                    <li onclick="closeTab">关闭标签页</li>
+                    <li onclick="closeOtherTab">关闭其他标签页</li>
+                    <li onclick="closeAllTab">关闭所有标签页</li>
+                    <li onclick="refreshTab">刷新标签页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div title="south" region="south" splitsize="1" showsplit="false"
+         showheader="false" height="30"
+         style="background-color: #00936D; color: #ffffff;">
+        <div style="line-height: 28px; text-align: center; cursor: default">Copyright
+            © 全友家私有限公司版权所有
+        </div>
+    </div>
+</div>
+</body>
+</html>

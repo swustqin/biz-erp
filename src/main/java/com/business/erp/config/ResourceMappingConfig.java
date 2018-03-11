@@ -14,7 +14,7 @@ public class ResourceMappingConfig {
 
     /**
      * Version manager
-     *
+     * <p>
      * 在使用第三方库，我们可以是使用WebJarAssetLocator的方式进行版本管理，
      * 但是使用自己写css和js，建议使用ResourceUrlProvider进行版本管理，
      * 并避免在版本发生改变时，由于浏览器缓存而产生资源版本未改变的错误.

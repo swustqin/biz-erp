@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<#include "/coframe/tools/skins/common.jsp" />
+<!--
+  - Author(s):majiankai
+  - Date: 2016-09-28 10:38:33
+  - Description:菜单管理入口
+-->
+<head>
+</head>
+<body>
+<style>
+#tree1 .mini-grid-viewport{
+	background-color:transparent !important;
+}
+#tree1 .mini-panel-viewport{
+	background-color:transparent !important;
+}
+#menutabs .mini-tabs-bodys{
+	padding:0px;
+}
+</style>
+
+<div id="layout1" class="nui-layout" style="width:100%;height:100%;">
+	<div id="region1" region="west" title="菜单管理" showHeader="true" class="sub-sidebar"
+	width="240" allowResize="false">
+		<ul id="tree1" class="nui-tree" url="${basePath}/menu/getMenuList"
+	        showTreeIcon="true" textField="menuName" idField="menuId" resultAsTree="false" parentField="parentSid" showTreeLines="true" onnodeclick="onNodeClick" contextMenu="#menuTreeMenu"
+	          allowDrag="true" allowDrop="true" onbeforeload="onBeforeTreeLoad" >
+    	</ul>
+    	<ul id="menuTreeMenu" class="nui-contextmenu"  onbeforeopen="onBeforeOpen">
+		</ul>
+    </div>
+    <div title="center" region="center" style="border:0;padding-left:5px;padding-top:5px;">
+    	<!--Tabs-->
+       <div id="menutabs" class="nui-tabs  bg-toolbar" activeIndex="0" style="width:100%;height:100%;">
+		    </div>
+		</div>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    nui.parse();
+    var tree = nui.get("tree1");
+	 function onBeforeTreeLoad(e) {
+		e.params.menuId = e.node.menuId;
+		e.params.menuLevel = e.node.menuLevel;
+    }
+	var menu_info = { title: '菜单信息', path: '${basePath}/page?view=system/menu/menuInfo' };
+	var menu_list = { title: '菜单列表', path: '${basePath}>/page?view=system/menu/menuList' };
+	var menutabs_map = {};
+	menutabs_map["root"] = [menu_list];
+	menutabs_map["menugroup"] = [menu_info,menu_list];
+	menutabs_map["menu"] = [menu_info];
+	
+	function setUrlParam(url,params){
+		if(!url){
+			return url;
+		}
+		var paramsStr = [];
+		for(var prop in params){
+			paramsStr.push(prop + "=" + params[prop]);
+		}
+		if(url.indexOf("?")>=0){
+			return url + "&" + paramsStr.join("&");
+		}else{
+			return url + "?" + paramsStr.join("&");
+		}
+	
+	}
+	
+	function refreshTab(node){
+		var tabs = nui.get("menutabs");
+		var menutabs = menutabs_map[node.type];
+		
+		for(var i=0;i<menutabs.length;i++){
+			var obj = menutabs[i];
+			obj.url = setUrlParam(obj.path,node);
+		}
+		tabs.setTabs(menutabs);
+	}
+	
+	
+	//树左键点击触发事件
+	function onNodeClick(e){
+		var node = e.node;
+		refreshTab(node);
+	}
+	
+	
+	
+	
+	//菜单管理树右键
+	
+	function addMenu(){
+     	var node = tree.getSelectedNode();
+		nui.open({
+			url: "${basePath}/page?view=system/menu/menuAdd",
+            title: "新增菜单", 
+            width: 600,
+            height: 167,
+            allowResize:false,
+            onload: function () {
+            	//新增菜单时，需要获取父级菜单的ID和菜单level（其中根菜单menuLevel=0，nodeId=null）
+            	var data = {parentSid:node.menuId,menuLevel:node.menuLevel+1};
+            	var iframe = this.getIFrameEl();
+                iframe.contentWindow.SetData(data);
+            },
+            ondestroy: function (action) {
+                if (action == "ok") {
+	            	tree.selectNode(node);
+	            	refreshTab(node);
+	            	refresh();
+	            }
+            }
+        });
+	}
+	
+	function editMenu(){
+		nui.open({
+			url: "${basePath}/page?view=system/menu/menuEdit",
+	        title: "编辑菜单", 
+	        width: 600,
+            height: 167,
+	        allowResize:false,
+	        onload: function () {
+	            var node = tree.getSelectedNode();
+	       		var data = {menuId:node.menuId};
+	        	var iframe = this.getIFrameEl();
+	            iframe.contentWindow.SetData(data);
+	        },
+	        ondestroy: function (action) {
+	            if (action == "ok") {
+	            	var node = tree.getSelectedNode();
+	            	var parentNode = tree.getParentNode(node);
+	            	tree.selectNode(node);
+	            	refreshTab(node);
+	            	refreshParentNode();
+	            	
+	            }
+	        }
+	    });
+	}
+	
+	function removeMenu(){
+		var node = tree.getSelectedNode();
+		nui.confirm("该节点下的所有子节点都将被删除，确定？","删除确认",function(action){
+		    if(action!="ok") return;
+	        g.ajax({
+            	url: "${basePath}/menu/deleteMenuById",
+				data:{menuId:node.menuId},
+				backCall:function(text){
+					var parentNode = tree.getParentNode(node);
+	            	tree.loadNode(parentNode);
+	            	tree.selectNode(parentNode);
+	            	refreshTab(parentNode);
+				}
+			});
+        });
+	}
+	
+	function refresh(){
+		var node = tree.getSelectedNode();
+		if(!node){
+			node = tree.getNode("root");
+		}
+		tree.loadNode(node);
+	
+	}
+	
+	function refreshParentNode(){
+		var node = tree.getSelectedNode();
+		var parentNode = tree.getParentNode(node);
+	    tree.loadNode(parentNode);
+	    tree.selectNode(parentNode);
+	    refreshTab(parentNode);
+		
+	}
+	
+	function onBeforeOpen(e) {
+	    var obj = e.sender;
+	    var node = tree.getSelectedNode();
+	    if (!node) {
+	        e.cancel = true;
+	        return;
+	    }
+	    if(node.type=="root"){
+	    	var array = [{id: "addmenu", text: "新建菜单", iconCls:"icon-add", onclick:"addMenu"},
+						{id: "separator", text: "", cls:"mini-separator"},
+						{id: "refresh", text: "刷新", iconCls:"icon-reload", onclick:"refresh"}];
+			e.htmlEvent.preventDefault();
+			obj.loadList(array);
+	    }
+	    
+	    if(node.type=="menugroup"){
+	    	var array = [{id: "addmenugroup", text: "新建菜单", iconCls:"icon-add", onclick:"addMenu"},
+						{id: "editmenu", text: "修改菜单", iconCls:"icon-edit", onclick:"editMenu"},
+						{id: "removemenu", text: "删除菜单", iconCls:"icon-remove", onclick:"removeMenu"},
+						{id: "separator", text: "", cls:"mini-separator"},
+						{id: "refresh", text: "刷新", iconCls:"icon-reload", onclick:"refresh"}];
+			e.htmlEvent.preventDefault();
+			obj.loadList(array);			
+	    }
+	    
+	    if(node.type=="menu"){
+	   		var array = [{id: "editmenu", text: "修改菜单", iconCls:"icon-edit", onclick:"editMenu"},
+						{id: "removemenu", text: "删除菜单", iconCls:"icon-remove", onclick:"removeMenu"}];
+	    	e.htmlEvent.preventDefault();
+			obj.loadList(array);
+	    }
+	}
+</script>
+</body>
+</html>

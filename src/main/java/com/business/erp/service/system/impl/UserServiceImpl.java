@@ -1,6 +1,5 @@
 package com.business.erp.service.system.impl;
 
-import com.business.erp.model.bo.SysBaseInfo;
 import com.business.erp.model.po.system.SysUser;
 import com.business.erp.persistence.system.jpa.SysUserRepository;
 import com.business.erp.persistence.system.mapper.UserMapper;
@@ -15,7 +14,7 @@ import javax.transaction.Transactional;
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Resource
     private SysUserRepository userRepository;
@@ -24,8 +23,8 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
 
     @Override
-    public SysUser findByAccount(String username) {
-        return userRepository.findByAccount(username);
+    public SysUser findByName(String username) {
+        return userRepository.findByName(username);
     }
 
     @Override
@@ -33,9 +32,9 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(sysUser);
     }
 
-    @Override
-    public SysBaseInfo queryBaseInfo(String userName) {
-        return userMapper.queryBaseInfo(userName);
-    }
+//    @Override
+//    public SysBaseInfo queryBaseInfo(String userName) {
+//        return userMapper.queryBaseInfo(userName);
+//    }
 
 }

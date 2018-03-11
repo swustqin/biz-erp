@@ -47,7 +47,7 @@ public class ErpShiroRealm extends AuthorizingRealm {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String username = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
-        SysUser user = userService.findByAccount(username);
+        SysUser user = userService.findByName(username);
         if (user == null) {
             return null;
         }
@@ -58,13 +58,13 @@ public class ErpShiroRealm extends AuthorizingRealm {
         }
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
-        session.setAttribute("user",user);
-        Date date=new Date();
+        session.setAttribute("user", user);
+        Date date = new Date();
         user.setLastLoginDate(date);
         userService.save(user); //记录最后登录时间
 
-        SysBaseInfo baseInfo = userService.queryBaseInfo(user.getUsername());
-        session.setAttribute("baseInfo", baseInfo);
+//        SysBaseInfo baseInfo = userService.queryBaseInfo(user.getUsername());
+//        session.setAttribute("baseInfo", baseInfo);
 
         String ipInfo = NetworkUtil.getConfig();  //获取当前IP地址以及以太网MAC地址
         session.setAttribute("ip", ipInfo);
